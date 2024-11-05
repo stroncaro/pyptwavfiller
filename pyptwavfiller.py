@@ -25,7 +25,8 @@ def print_help() -> None:
 
 
 def create_index() -> None:
-    base_dir = os.path.dirname(os.path.realpath(__file__))
+    # base_dir = os.path.dirname(os.path.realpath(__file__))
+    base_dir = os.getcwd()
     with open("index.txt", "w") as index:
 
         def add_file_path_to_index(path: str) -> None:
@@ -45,7 +46,8 @@ def crawl_dirs(path: str, *, func: Optional[Callable[[str], None]] = None):
 
 def mount_index() -> None:
     with open(argv[2], "r") as index:
-        print("opened!")
+        for line in index:
+            print(line.strip())
 
     raise NotImplementedError()
 
