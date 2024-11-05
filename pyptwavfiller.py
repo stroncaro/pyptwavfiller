@@ -1,3 +1,5 @@
+from typing import Optional, Callable
+
 from enum import StrEnum
 import os
 from sys import argv
@@ -24,16 +26,22 @@ def print_help() -> None:
 
 def create_index() -> None:
     path = os.path.dirname(os.path.realpath(__file__))
-    crawl_dirs(path)
+    with open("index.txt", "w") as file:
+
+        def add_path_to_file(path: str) -> None:
+            file.write(path + "\n")
+
+        crawl_dirs(path, func=add_path_to_file)
 
     raise NotImplementedError()
 
 
-def crawl_dirs(path: str):
+def crawl_dirs(path: str, *, func: Optional[Callable[[str], None]] = None):
     for entry in os.scandir(path):
-        print(entry)
         if entry.is_dir(follow_symlinks=False):
-            crawl_dirs(entry.path)
+            crawl_dirs(entry.path, func=func)
+        if entry.is_file(follow_symlinks=False):
+            func(entry.path)
 
 
 def mount_index(index) -> None:
