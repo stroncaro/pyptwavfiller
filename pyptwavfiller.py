@@ -1,5 +1,5 @@
 from enum import StrEnum
-
+import os
 from sys import argv
 
 HELP_TEXT = """
@@ -23,7 +23,17 @@ def print_help() -> None:
 
 
 def create_index() -> None:
+    path = os.path.dirname(os.path.realpath(__file__))
+    crawl_dirs(path)
+
     raise NotImplementedError()
+
+
+def crawl_dirs(path: str):
+    for entry in os.scandir(path):
+        print(entry)
+        if entry.is_dir(follow_symlinks=False):
+            crawl_dirs(entry.path)
 
 
 def mount_index(index) -> None:
