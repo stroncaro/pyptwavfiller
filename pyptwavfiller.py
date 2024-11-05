@@ -1,5 +1,7 @@
-from enum import StrEnum
+from typing import Optional, Callable
 
+from enum import StrEnum
+import os
 from sys import argv
 
 HELP_TEXT = """
@@ -23,7 +25,22 @@ def print_help() -> None:
 
 
 def create_index() -> None:
-    raise NotImplementedError()
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    with open("index.txt", "w") as index:
+
+        def add_file_path_to_index(path: str) -> None:
+            relative_path = path.removeprefix(base_dir)
+            index.write(relative_path + "\n")
+
+        crawl_dirs(base_dir, func=add_file_path_to_index)
+
+
+def crawl_dirs(path: str, *, func: Optional[Callable[[str], None]] = None):
+    for entry in os.scandir(path):
+        if entry.is_dir(follow_symlinks=False):
+            crawl_dirs(entry.path, func=func)
+        if entry.is_file(follow_symlinks=False):
+            func(entry.path)
 
 
 def mount_index(index) -> None:
