@@ -33,8 +33,6 @@ def create_index() -> None:
 
         crawl_dirs(path, func=add_path_to_file)
 
-    raise NotImplementedError()
-
 
 def crawl_dirs(path: str, *, func: Optional[Callable[[str], None]] = None):
     for entry in os.scandir(path):
