@@ -43,7 +43,10 @@ def crawl_dirs(path: str, *, func: Optional[Callable[[str], None]] = None):
             func(entry.path)
 
 
-def mount_index(index) -> None:
+def mount_index() -> None:
+    with open(argv[2], "r") as index:
+        print("opened!")
+
     raise NotImplementedError()
 
 
