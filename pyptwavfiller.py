@@ -25,13 +25,14 @@ def print_help() -> None:
 
 
 def create_index() -> None:
-    path = os.path.dirname(os.path.realpath(__file__))
-    with open("index.txt", "w") as file:
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    with open("index.txt", "w") as index:
 
-        def add_path_to_file(path: str) -> None:
-            file.write(path + "\n")
+        def add_file_path_to_index(path: str) -> None:
+            relative_path = path.removeprefix(base_dir)
+            index.write(relative_path + "\n")
 
-        crawl_dirs(path, func=add_path_to_file)
+        crawl_dirs(base_dir, func=add_file_path_to_index)
 
 
 def crawl_dirs(path: str, *, func: Optional[Callable[[str], None]] = None):
